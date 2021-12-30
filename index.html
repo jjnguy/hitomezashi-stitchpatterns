@@ -7,8 +7,6 @@
 
 <body>
   <canvas width="1000" height="1000" id="canvas"></canvas>
-  <input id="x" placeholder="y" type="text" />
-  <input id="y" placeholder="x" type="text" />
   <button id="go">go</button>
   <script>
     let canvas = document.getElementById('canvas');
@@ -20,9 +18,6 @@
     draw();
 
     function draw() {
-      let xText = document.getElementById('x').value;
-      let yText = document.getElementById('y').value;
-
       var xStarts = [...Array(gridSize * 5)].map(() => {
         return Math.random() < .5 ? true : false;
       });
