@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+  <canvas width="1000" height="1000" id="canvas"></canvas>
+  <input id="x" placeholder="y" type="text" />
+  <input id="y" placeholder="x" type="text" />
+  <button id="go">go</button>
+  <script>
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    let go = document.getElementById('go');
+
+    let gridSize = 20;
+
+    draw();
+
+    function draw() {
+      let xText = document.getElementById('x').value;
+      let yText = document.getElementById('y').value;
+
+      var xStarts = [...Array(gridSize * 5)].map(() => {
+        return Math.random() < .5 ? true : false;
+      });
+
+      var yStarts = [...Array(gridSize * 5)].map(() => {
+        return Math.random() < .5 ? true : false;
+      });
+
+      var y = 0;
+      xStarts.forEach(val => {
+        dashedLine({ x: 0, y: y }, { x: 1000, y: y }, 20, val);
+        y += gridSize;
+      });
+
+      var x = 0;
+      yStarts.forEach(val => {
+        dashedLine({ x: x, y: 0 }, { x: x, y: 1000 }, 20, val);
+        x += gridSize;
+      });
+    }
+
+    function dashedLine(from, to, segmentLength, startsOn) {
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.moveTo(from.x, from.y);
+      let distance = getDistance(from.x, from.y, to.x, to.y);
+      let numberOfSegments = distance / segmentLength;
+      let on = startsOn;
+      for (var i = 0; i < numberOfSegments; i++) {
+        let percentage1 = ((i / numberOfSegments) * distance) / distance;
+
+        let newX1 = ((1 - percentage1) * from.x + percentage1 * to.x);
+        let newY1 = ((1 - percentage1) * from.y + percentage1 * to.y);
+
+        /*
+        let percentage2 = ((i + 1) / numberOfSegments) * distance;
+
+        let newX2 = ((1 - percentage2) * from.x + percentage2 * to.x);
+        let newY2 = ((1 - percentage2) * from.y + percentage2 * to.y);*/
+
+        if (on) {
+          ctx.lineTo(newX1, newY1);
+        } else {
+          ctx.moveTo(newX1, newY1);
+        }
+
+        on = !on;
+      }
+      ctx.stroke();
+    }
+
+    function getDistance(x1, y1, x2, y2) {
+      let y = x2 - x1;
+      let x = y2 - y1;
+
+      return Math.sqrt(x * x + y * y);
+    }
+  </script>
+</body>
+
+</html>
